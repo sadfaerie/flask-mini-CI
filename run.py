@@ -13,14 +13,26 @@ messages = []
 def add_messages(username, message):
     """Add messages to the 'messages' list"""
     now = datetime.now().strftime("%H:%M:%S")
-    messages_dict = {"timestamp": now, "from": username, "message": message}
     #messages.append("({}) {}: {}".format(now, username, message))
-    messages.append(messages_dict)
+    message_dict = {"timestamp": now, "from": username, "message": message}
+    #messages.append(messages_dict)
+
+    # write the chat messages to chat.txt file
+    with open("data/messages.txt", "a") as chat_list:
+        chat_list.writelines("({0}) {1} - {2}\n".format(
+            message_dict["timestamp"],
+            message_dict["from"].title(),
+            message_dict["message"]))
 
 def get_all_messages():
     """ Get all of the messages and separate them by a 'br'"""
     #return "<br>".join(messages)
+    #return messages
+    message = []
+    with open("data/messages.txt", "r") as chat_messages:
+        messages = chat_messages.readlines()
     return messages
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
